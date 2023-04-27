@@ -82,7 +82,7 @@ _010.000.002.004.56838-010.000.002.015.01245.extracted
 admiral_shark.pcapng
 report.xml
 
-5. Poping into this we can start looking through the files. For some reason I went straight for the "sharedDtrings.xml" file and voila!
+5. Poping into this we can start looking through the files. For some reason I went straight for the "sharedStrings.xml" file and voila!
 
 /_010.000.002.004.56838-010.000.002.015.01245.extracted$ ls
  147.zip  '[Content_Types].xml'   _rels   xl
