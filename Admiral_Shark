@@ -1,0 +1,97 @@
+Admiral Shark (misc)
+20 points
+Author: cavocado
+
+Info:
+I have been snooping on the conversations of my elusive enemies. 
+See if you can help me gather the information I need to defeat them once and for all.
+
+HINT: https://www.youtube.com/watch?v=XqZsoesa55w&vl=en
+
+----
+
+1. Looking through the admiral_shark.pcapng file.
+Following the TCPSTREAM showed this communication between two parties:
+
+"Springhawk, this is the Vigilant.
+What is your status, Senior Captain Mitth'raw'nuruodo?"
+
+"Admiral Ar'alani, Eli Vanto finished analyzing the data.
+Sending it now."
+
+At the bottom of the file there is a datatransfer significantly larger than the rest.
+Looking at this shows a bunch of gibberish with the exception of several names of ".xml"
+files and the classic "PK" notation signifying .zip files. Takeaway from this is that
+there are a bunch of files here that we need to get our hands on.
+
+2. To get the files out I used "tcpflow -r admiral_shark.pcapng"
+
+$ tcpflow -r admiral_shark.pcapng 
+reportfilename: ./report.xml
+
+$ file *
+010.000.002.004.56836-010.000.002.015.01245: ASCII text
+010.000.002.004.56838-010.000.002.015.01245: data
+010.000.002.015.01245-010.000.002.004.56836: ASCII text
+010.000.002.015.05555-010.000.002.004.33114: data
+admiral_shark.pcapng:                        pcapng capture file - version 1.0
+report.xml:                                  XML 1.0 document, ASCII text, with very long lines (769)
+
+$ cat 010.000.002.004.56836-010.000.002.015.01245
+Admiral Ar'alani, Eli Vanto finished analyzing the data.
+Sending it now.
+
+$ cat 010.000.002.015.01245-010.000.002.004.56836
+Springhawk, this is the Vigilant.
+What is your status, Senior Captain Mitth'raw'nuruodo?
+
+$ cat 010.000.002.004.56838-010.000.002.015.01245
+z�Vxl/drawings/drawing1.xml��]n�0
+                                 ��U�iZC^�N0�%n����~�J6i{m�?���nt��Db|#�z��]#�o��(8��`��F\��n��5�ϼ�"�{^��}��ZJV=:�2
+� ��:�  �IvVΫ�E��{ĸ�&�������Mׄ�5    �Ӵ
+�A��8!�b��f଩�Q=P���3��6�*��)�HB�<	8�����R���_���O�,�Czȇ�&^��eFwh��ȸ8��ݱ*�6�(+l�^ޭ̳"�_Pbiz�Vxl/worksheets/sheet1.xml���n�0@��� �nQL�4$I���AӞjd�"����H�����Ù7�[�0hu༴&',NHF�R�]N>~�l�H�7%W�@N��C�-���� 0>'MJ�5h�cۀ���:�Nݎ��/�"��U��Rͥ!GB��0lUI�V��L8B(P�ײ�'�.pZ
+g��B,��Ih (
+           &��3!-�i��m�Ad��R�p��L��֙tfl��&��i��)y`7�/�ޟ�l�$�P��A��˳X���B��0ˍ�O��&��ȷ�����9��;��c�]��o	��2��g�i�~���gE_s_�
+                                           Ǟ����pl�HTB�[~X�G����U|{���m�$o���?�y�E�l��Sdb<"�O\,��$�*�9��2�-y'�c����r�R��s�%�6����/P��(z�V#xl/worksheets/_rels/sheet1.xml.rels��K
+                                           
+3. Here I've got the file that was sent and to extract the contents I used "binwalk -e 010.000.002.004.56838-010.000.002.015.01245"
+
+$ binwalk -e 010.000.002.004.56838-010.000.002.015.01245
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+327           0x147           Zip archive data, at least v2.0 to extract, name: xl/worksheets/sheet1.xml
+822           0x336           Zip archive data, at least v2.0 to extract, name: xl/worksheets/_rels/sheet1.xml.rels
+1082          0x43A           Zip archive data, at least v2.0 to extract, name: xl/theme/theme1.xml
+1955          0x7A3           Zip archive data, at least v2.0 to extract, name: xl/sharedStrings.xml
+2195          0x893           Zip archive data, at least v2.0 to extract, name: xl/styles.xml
+2723          0xAA3           Zip archive data, at least v2.0 to extract, name: xl/workbook.xml
+3111          0xC27           Zip archive data, at least v2.0 to extract, name: xl/_rels/workbook.xml.rels
+3417          0xD59           Zip archive data, at least v2.0 to extract, name: _rels/.rels
+3652          0xE44           Zip archive data, at least v2.0 to extract, name: [Content_Types].xml
+4692          0x1254          End of Zip archive, footer length: 22
+
+4. binwalk creates an archive with the same name as the file being "handled" with a preceeding "_"
+
+$ ls
+010.000.002.004.56836-010.000.002.015.01245
+010.000.002.004.56838-010.000.002.015.01245
+_010.000.002.004.56838-010.000.002.015.01245.extracted
+010.000.002.015.01245-010.000.002.004.56836
+010.000.002.015.05555-010.000.002.004.33114
+admiral_shark.pcapng
+report.xml
+
+5. Poping into this we can start looking through the files. For some reason I went straight for the "sharedDtrings.xml" file and voila!
+
+/_010.000.002.004.56838-010.000.002.015.01245.extracted$ ls
+ 147.zip  '[Content_Types].xml'   _rels   xl
+/_010.000.002.004.56838-010.000.002.015.01245.extracted$ file 147.zip 
+147.zip: Microsoft Excel 2007+
+/_010.000.002.004.56838-010.000.002.015.01245.extracted$ cd xl
+/_010.000.002.004.56838-010.000.002.015.01245.extracted/xl$ ls
+_rels  sharedStrings.xml  styles.xml  theme  workbook.xml  worksheets
+/_010.000.002.004.56838-010.000.002.015.01245.extracted/xl$ cat sharedStrings.xml 
+<sst xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" count="2" uniqueCount="2"><si><t>flag</t></si><si><t>actf{wireshark_in_space}</t></si></sst>
+
+flag: actf{wireshark_in_space}
