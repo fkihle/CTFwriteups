@@ -14,4 +14,5 @@ separate from any production devices.
 Solve Steps:
 
 1. `file ` shows us that we're dealing with a uHarc archive.
-2. [node-uharc](https://github.com/ghaschel/node-uharc)
+2. uHarc extractor tool for Win: [https://sam.gleske.net/uharc/](https://sam.gleske.net/uharc/)
+3. 
