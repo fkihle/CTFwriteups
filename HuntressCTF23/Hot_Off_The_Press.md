@@ -1,5 +1,7 @@
 Challenge info:
 
+Author: @JohnHammond
+
 Oh wow, a malware analyst shared a sample that I [read about in the news](https://www.huntress.com/blog/critical-vulnerabilities-ws_ftp-exploitation)!
 
 But it looks like they put it in some weird kind of archive...? Anyway, the password should be infected as usual!
