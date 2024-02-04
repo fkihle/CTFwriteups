@@ -13,7 +13,7 @@ Super Secret Robot Stuff<br>
 You have fallen for my trap and are stuck in the human zone. My site is now closed to you.<br>
 And because you humans are not great at poking around, I added a user-agent to my ruleset for the other robots. Do not enter the forbidden sites at your own risk<br>
 
-### paste screenshot
+![](./assets/NoHumans_01.png)
 
 2. Since the task talks about "my ruleset for the other robots" I took a look at: http://chal.bearcatctf.io:48605/robots.txt<br>
 The robots.txt file is filled with fun. I copied all of the info into a text document and removed everything except the url-endpoints.
@@ -26,7 +26,7 @@ HumanRebels
 AttackDrones
 *
 ```
-### paste screenshot
+![](./assets/NoHumans_02.png)
 
 3. Next I turned to **WFUZZ:**
 ```
@@ -60,4 +60,4 @@ curl -H "user-agent: Overlords" http://chal.bearcatctf.io:48605/Baohf2Z5O921i5s.
 5. flag: **BCCTF{Th1s_Is_wHy_Hum4ns_N33d_4ppLy}**
 
 6. Note: I tried pasting the endpoint-url directly in the browser and recieved the flag even without setting a custom "User-Agent":
-### paste screenshot
+![](./assets/NoHumans_03.png)
